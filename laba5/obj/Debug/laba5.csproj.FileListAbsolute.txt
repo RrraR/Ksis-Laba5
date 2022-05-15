@@ -1,0 +1,9 @@
+D:\Documents\uni\4 сем\ксис\laba5\laba5\laba5\bin\Debug\laba5.exe
+D:\Documents\uni\4 сем\ксис\laba5\laba5\laba5\bin\Debug\laba5.pdb
+D:\Documents\uni\4 сем\ксис\laba5\laba5\laba5\obj\Debug\laba5.csproj.AssemblyReference.cache
+D:\Documents\uni\4 сем\ксис\laba5\laba5\laba5\obj\Debug\laba5.csproj.CoreCompileInputs.cache
+D:\Documents\uni\4 сем\ксис\laba5\laba5\laba5\obj\Debug\laba5.exe
+D:\Documents\uni\4 сем\ксис\laba5\laba5\laba5\obj\Debug\laba5.pdb
+D:\Documents\uni\4 сем\ксис\laba5\laba5\laba5\bin\Debug\Newtonsoft.Json.dll
+D:\Documents\uni\4 сем\ксис\laba5\laba5\laba5\bin\Debug\Newtonsoft.Json.xml
+D:\Documents\uni\4 сем\ксис\laba5\laba5\laba5\obj\Debug\laba5.csproj.CopyComplete
