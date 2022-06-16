@@ -43,24 +43,22 @@ namespace laba5
                             {
                                 var buffer = Encoding.ASCII.GetBytes(jsonFileEnteries);
                                 output.Write(buffer, 0, jsonFileEnteries.Length);
-                                Console.WriteLine("status: {0}", resp.StatusCode);
                             }
+                            resp.StatusCode = 200;
+                            Console.WriteLine("status: {0}", resp.StatusCode);
                         }
                         else
                         {
                             Console.WriteLine("directory not found");
-                            using (var output = resp.OutputStream)
-                            {
-                                var buffer = Encoding.ASCII.GetBytes("404 Not Found/directory not found");
-                                output.Write(buffer, 0, buffer.Length);
-                            }
                             Console.WriteLine("404 Not Found");
+                            resp.StatusCode = 404;
                         }
                     }
                     else if (req.Url.AbsolutePath.Contains("/file/") &&
                              (req.Url.AbsolutePath.Substring(1, 5) == "file/"))
                     {
                         //download file
+                        //http://localhost:8000/file/testdir/studID.jpg
                         String getPath = req.Url.LocalPath;
                         var localPath = getPath.Replace("/file/", String.Empty);
                         FileInfo fileToDownload = new FileInfo(localPath);
@@ -68,6 +66,7 @@ namespace laba5
                         {
                             Console.WriteLine("file is there");
                             resp.ContentType = "application/force-download";
+                            resp.StatusCode = 201;
                             resp.Headers.Add("Content-Transfer-Encoding", "binary");
                             resp.Headers.Add("Content-Disposition", $"attachment; filename={fileToDownload.Name}");
 
@@ -77,17 +76,13 @@ namespace laba5
                                 var buffer = File.ReadAllBytes(localPath);
                                 output.Write(buffer, 0, buffer.Length);
                             }
-                            Console.WriteLine("ststus: 201 Created");
+                            Console.WriteLine("status: {0}", resp.StatusCode);
                         }
                         else
                         {
                             Console.WriteLine("directory or file not found");
-                            using (var output = resp.OutputStream)
-                            {
-                                var buffer = Encoding.ASCII.GetBytes("404 Not Found/directory or file not found");
-                                output.Write(buffer, 0, buffer.Length);
-                            }
-                            Console.WriteLine("404 Not Found");
+                            resp.StatusCode = 404;
+                            Console.WriteLine("status: {0}", resp.StatusCode);
                         }
                     }
                     else if (req.Url.AbsolutePath == "/shutdown")
@@ -98,12 +93,8 @@ namespace laba5
                     else
                     {
                         Console.WriteLine("invalid command");
-                        Console.WriteLine("400 Bad Request");
-                        using (var output = resp.OutputStream)
-                        {
-                            var buffer = Encoding.ASCII.GetBytes("400 Bad Request/invalid command");
-                            output.Write(buffer, 0, buffer.Length);
-                        }
+                        resp.StatusCode = 400;
+                        Console.WriteLine("status: {0}", resp.StatusCode);
                     }
 
                     break;
@@ -128,17 +119,15 @@ namespace laba5
                             input.CopyTo(fileStream);
                             fileStream.Close();
                         }
+
+                        resp.StatusCode = 201;
                         Console.WriteLine("status: {0}", resp.StatusCode);
                     }
                     else
                     {
                         Console.WriteLine("invalid command");
-                        Console.WriteLine("400 Bad Request");
-                        using (var output = resp.OutputStream)
-                        {
-                            var buffer = Encoding.ASCII.GetBytes("400 Bad Request/invalid command");
-                            output.Write(buffer, 0, buffer.Length);
-                        }
+                        resp.StatusCode = 400;
+                        Console.WriteLine("status: {0}", resp.StatusCode);
                     }
 
                     break;
@@ -170,29 +159,21 @@ namespace laba5
                             resp.Headers.Add("Content-Disposition", $"attachment; filename={fileToGetInfo.Name}");
                             Console.WriteLine(resp.ContentType);
                             Console.WriteLine(resp.ContentLength64);
+                            resp.StatusCode = 200;
                             Console.WriteLine("status: {0}", resp.StatusCode);
                         }
                         else
                         {
                             Console.WriteLine("file not found");
-                            Console.WriteLine("404 Not Found/file not found");
-                            // using (var output = resp.OutputStream)
-                            // {
-                            //     var buffer = Encoding.ASCII.GetBytes("file not found");
-                            //     resp.ContentLength64 = buffer.Length;
-                            //     output.Write(buffer, 0, buffer.Length);
-                            // }
+                            resp.StatusCode = 404;
+                            Console.WriteLine("status: {0}", resp.StatusCode);
                         }
                     }
                     else
                     {
                         Console.WriteLine("invalid command");
-                        Console.WriteLine("400 Bad Request");
-                        using (var output = resp.OutputStream)
-                        {
-                            var buffer = Encoding.ASCII.GetBytes("400 Bad Request/invalid command");
-                            output.Write(buffer, 0, buffer.Length);
-                        }
+                        resp.StatusCode = 400;
+                        Console.WriteLine("status: {0}", resp.StatusCode);
                     }
 
                     break;
@@ -210,6 +191,7 @@ namespace laba5
                         {
                             Console.WriteLine("file found");
                             File.Delete(localPath);
+                            resp.StatusCode = 200;
                             Console.WriteLine("status: {0}", resp.StatusCode);
                         }
                         else if ((!fileToDelete.Exists) && (Directory.Exists(localPath)))
@@ -227,29 +209,21 @@ namespace laba5
                             }
 
                             Directory.Delete(localPath);
+                            resp.StatusCode = 200;
                             Console.WriteLine("status: {0}", resp.StatusCode);
                         }
                         else
                         {
                             Console.WriteLine("directory of file not found");
-                            using (var output = resp.OutputStream)
-                            {
-                                var buffer = Encoding.ASCII.GetBytes("404 Not Forund/directory or file not found");
-                                resp.ContentLength64 = buffer.Length;
-                                output.Write(buffer, 0, buffer.Length);
-                            }
-                            Console.WriteLine("404 Not Forund");
+                            resp.StatusCode = 204;
+                            Console.WriteLine("status: {0}", resp.StatusCode);
                         }
                     }
                     else
                     {
+                        resp.StatusCode = 400;
                         Console.WriteLine("invalid command");
-                        Console.WriteLine("400 Bad Request");
-                        using (var output = resp.OutputStream)
-                        {
-                            var buffer = Encoding.ASCII.GetBytes("400 Bad Request/invalid command");
-                            output.Write(buffer, 0, buffer.Length);
-                        }
+                        Console.WriteLine("status: {0}", resp.StatusCode);
                     }
 
                     break;
